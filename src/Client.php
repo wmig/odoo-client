@@ -101,6 +101,36 @@ class Client
 		return $response;
 	}
 
+    /**
+     * Call model method
+     *
+     * @param string  $model    Model
+     * @param string   $method method name
+     * @param ...$args
+     *
+     * @return mixed call result
+     */
+
+    public function call($model, $method, ...$args)
+    {
+        $response = $this->getClient('object')->execute_kw(
+            $this->database,
+            $this->uid(),
+            $this->password,
+            $model,
+            $method,
+            $args
+        );
+
+        return $response;
+    }
+
+    public function __call($method, $args)
+    {
+        $model = array_shift($args);
+        return $this->call($model, $method, ...$args);
+    }
+
 	/**
 	 * Search models
 	 *
